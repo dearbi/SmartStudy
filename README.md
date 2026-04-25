@@ -28,7 +28,7 @@ npm --version
 ### 方式一：从 Git 仓库克隆
 
 ```bash
-git clone [<仓库地址>](https://github.com/dearbi/SmartStudy)
+git clone https://github.com/dearbi/SmartStudy
 cd 智学伴侣
 ```
 
