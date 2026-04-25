@@ -1,0 +1,369 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@300;400;600&display=swap');
+
+.schedule-container {
+    font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+    background: #000000;
+    background-image: 
+        radial-gradient(ellipse at 20% 30%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(212, 175, 55, 0.06) 0%, transparent 50%),
+        linear-gradient(180deg, #000000 0%, #0a0a0a 50%, #000000 100%);
+    background-attachment: fixed;
+    color: #e8e8e8;
+    position: relative;
+    /* overflow-x: hidden; Removed to avoid conflict with main layout */
+    min-height: 100vh;
+}
+
+.schedule-container::before {
+    content: '';
+    position: absolute; /* Changed from fixed to absolute/fixed within container if possible, but fixed works for background overlay */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(212, 175, 55, 0.03) 2px, rgba(212, 175, 55, 0.03) 4px);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Scoped Watermark - using absolute to stay within container if relative */
+.schedule-container .watermark-main {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    font-family: 'Cinzel', serif;
+    font-size: 6rem;
+    font-weight: 300;
+    color: rgba(212, 175, 55, 0.08);
+    pointer-events: none;
+    z-index: 0;
+    user-select: none;
+    letter-spacing: 1.5rem;
+    text-shadow: 0 0 30px rgba(212, 175, 55, 0.05);
+    animation: watermarkPulse 10s ease-in-out infinite;
+}
+
+.schedule-container .watermark-layer {
+    position: fixed;
+    pointer-events: none;
+    user-select: none;
+    font-family: 'Cinzel', serif;
+    color: rgba(212, 175, 55, 0.06);
+    z-index: 0;
+    font-weight: 300;
+}
+
+.schedule-container .watermark-1 {
+    top: 20%;
+    left: 15%;
+    transform: rotate(-30deg);
+    font-size: 2rem;
+    letter-spacing: 0.5rem;
+}
+
+.schedule-container .watermark-2 {
+    top: 70%;
+    right: 15%;
+    transform: rotate(30deg);
+    font-size: 2rem;
+    letter-spacing: 0.5rem;
+}
+
+.schedule-container .watermark-3 {
+    top: 30%;
+    right: 25%;
+    transform: rotate(-60deg);
+    font-size: 1.5rem;
+    letter-spacing: 0.3rem;
+    opacity: 0.7;
+}
+
+@keyframes watermarkPulse {
+    0%, 100% { 
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(-45deg) scale(1);
+    }
+    50% { 
+        opacity: 0.6;
+        transform: translate(-50%, -50%) rotate(-45deg) scale(1.02);
+    }
+}
+
+.schedule-container .content-wrapper { position: relative; z-index: 2; }
+
+/* Corner Watermark */
+.schedule-container .corner-watermark {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    color: rgba(212, 175, 55, 0.25);
+    pointer-events: none;
+    z-index: 1000;
+    user-select: none;
+    letter-spacing: 1px;
+    font-weight: 400;
+    text-shadow: 0 0 8px rgba(212, 175, 55, 0.15);
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.schedule-container .corner-watermark:hover {
+    opacity: 0.5;
+}
+
+.schedule-container .luxury-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 25%, #d4af37 50%, #ffed4e 75%, #ffd700 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s linear infinite;
+    text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+    filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
+}
+
+@keyframes shimmer {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+}
+
+.schedule-container .date-cell { min-width: 100px; font-size: 0.9rem; }
+.schedule-container .task-checkbox { 
+    transform: scale(1.3); 
+    cursor: pointer;
+    filter: drop-shadow(0 0 3px rgba(212, 175, 55, 0.5));
+}
+
+.schedule-container .completed { 
+    background: rgba(20, 20, 20, 0.8) !important;
+    color: #555 !important;
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.schedule-container .today-highlight { 
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(255, 215, 0, 0.1) 100%) !important;
+    border: 2px solid #d4af37 !important;
+    box-shadow: 
+        0 0 20px rgba(212, 175, 55, 0.4),
+        inset 0 0 20px rgba(212, 175, 55, 0.1) !important;
+    animation: pulse-gold 2s ease-in-out infinite;
+}
+
+@keyframes pulse-gold {
+    0%, 100% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.4), inset 0 0 20px rgba(212, 175, 55, 0.1); }
+    50% { box-shadow: 0 0 30px rgba(212, 175, 55, 0.6), inset 0 0 30px rgba(212, 175, 55, 0.15); }
+}
+
+.schedule-container .overdue { 
+    color: #ff4444; 
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+}
+
+/* Luxury Card Styles */
+.schedule-container .luxury-card {
+    background: rgba(15, 15, 15, 0.9);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(212, 175, 55, 0.1),
+        0 0 40px rgba(212, 175, 55, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.schedule-container .luxury-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+    transition: left 0.5s;
+    pointer-events: none;
+}
+
+.schedule-container .luxury-card:hover::before {
+    left: 100%;
+}
+
+/* Custom Scrollbar */
+.schedule-container .table-container::-webkit-scrollbar { height: 10px; }
+.schedule-container .table-container::-webkit-scrollbar-thumb { 
+    background: linear-gradient(90deg, #d4af37, #ffd700, #d4af37);
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+.schedule-container .table-container::-webkit-scrollbar-track { 
+    background: rgba(20, 20, 20, 0.5);
+    border-radius: 5px;
+}
+
+/* Gold Text */
+.schedule-container .gold-text { 
+    color: #d4af37;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+}
+
+/* Input Styles */
+.schedule-container input[type="date"] {
+    background: rgba(20, 20, 20, 0.8);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: #e8e8e8;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: 'Cormorant Garamond', serif;
+    transition: all 0.3s ease;
+}
+
+.schedule-container input[type="date"]:focus {
+    border-color: #d4af37;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    outline: none;
+    background: rgba(30, 30, 30, 0.9);
+}
+
+.schedule-container input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.7) sepia(1) saturate(5) hue-rotate(5deg);
+    cursor: pointer;
+}
+
+/* Button Styles */
+.schedule-container .luxury-button {
+    background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    color: #d4af37;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.schedule-container .luxury-button:hover {
+    background: linear-gradient(135deg, #d4af37, #ffd700);
+    color: #000;
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
+    transform: translateY(-2px);
+}
+
+.schedule-container .luxury-button.danger {
+    border-color: rgba(255, 68, 68, 0.5);
+    color: #ff4444;
+}
+
+.schedule-container .luxury-button.danger:hover {
+    background: linear-gradient(135deg, #ff4444, #ff6666);
+    color: #fff;
+    box-shadow: 0 0 25px rgba(255, 68, 68, 0.6);
+}
+
+.schedule-container .luxury-button.small {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    min-width: 40px;
+    height: 32px; /* Fixed height for consistency */
+}
+
+.schedule-container .unit-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.schedule-container .unit-count {
+    color: #999;
+    font-weight: normal;
+    font-size: 0.9rem;
+    margin-left: 12px;
+}
+
+/* Table Enhancements */
+.schedule-container table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.schedule-container thead th {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+.schedule-container tbody tr {
+    transition: all 0.3s ease;
+}
+
+.schedule-container tbody tr:hover {
+    background: rgba(212, 175, 55, 0.08) !important;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+}
+
+/* Decorative Elements */
+.schedule-container .gold-divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #d4af37, transparent);
+    margin: 20px 0;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+.schedule-container .corner-decoration {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    pointer-events: none;
+}
+
+.schedule-container .corner-decoration.top-left {
+    top: 0;
+    left: 0;
+    border-right: none;
+    border-bottom: none;
+}
+
+.schedule-container .corner-decoration.top-right {
+    top: 0;
+    right: 0;
+    border-left: none;
+    border-bottom: none;
+}
+
+.schedule-container .corner-decoration.bottom-left {
+    bottom: 0;
+    left: 0;
+    border-right: none;
+    border-top: none;
+}
+
+.schedule-container .corner-decoration.bottom-right {
+    bottom: 0;
+    right: 0;
+    border-left: none;
+    border-top: none;
+}

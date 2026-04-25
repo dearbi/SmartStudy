@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英语六级艾宾浩斯背诵计划</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@300;400;600&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+            background: #000000;
+            background-image: 
+                radial-gradient(ellipse at 20% 30%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(212, 175, 55, 0.06) 0%, transparent 50%),
+                linear-gradient(180deg, #000000 0%, #0a0a0a 50%, #000000 100%);
+            background-attachment: fixed;
+            color: #e8e8e8;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(212, 175, 55, 0.03) 2px, rgba(212, 175, 55, 0.03) 4px);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        /* 水印样式 */
+        body::after {
+            content: 'bwb创作';
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-family: 'Cinzel', serif;
+            font-size: 6rem;
+            font-weight: 300;
+            color: rgba(212, 175, 55, 0.08);
+            pointer-events: none;
+            z-index: 0;
+            user-select: none;
+            letter-spacing: 1.5rem;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.05);
+            animation: watermarkPulse 10s ease-in-out infinite;
+        }
+        
+        /* 多重水印效果 */
+        .watermark-layer {
+            position: fixed;
+            pointer-events: none;
+            user-select: none;
+            font-family: 'Cinzel', serif;
+            color: rgba(212, 175, 55, 0.06);
+            z-index: 0;
+            font-weight: 300;
+        }
+        
+        .watermark-1 {
+            top: 20%;
+            left: 15%;
+            transform: rotate(-30deg);
+            font-size: 2rem;
+            letter-spacing: 0.5rem;
+        }
+        
+        .watermark-2 {
+            top: 70%;
+            right: 15%;
+            transform: rotate(30deg);
+            font-size: 2rem;
+            letter-spacing: 0.5rem;
+        }
+        
+        .watermark-3 {
+            top: 30%;
+            right: 25%;
+            transform: rotate(-60deg);
+            font-size: 1.5rem;
+            letter-spacing: 0.3rem;
+            opacity: 0.7;
+        }
+        
+        @keyframes watermarkPulse {
+            0%, 100% { 
+                opacity: 1;
+                transform: translate(-50%, -50%) rotate(-45deg) scale(1);
+            }
+            50% { 
+                opacity: 0.6;
+                transform: translate(-50%, -50%) rotate(-45deg) scale(1.02);
+            }
+        }
+        
+        .content-wrapper { position: relative; z-index: 2; }
+        
+        /* 角落小水印 */
+        .corner-watermark {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            color: rgba(212, 175, 55, 0.25);
+            pointer-events: none;
+            z-index: 1000;
+            user-select: none;
+            letter-spacing: 1px;
+            font-weight: 400;
+            text-shadow: 0 0 8px rgba(212, 175, 55, 0.15);
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .corner-watermark:hover {
+            opacity: 0.5;
+        }
+        
+        .luxury-title {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 25%, #d4af37 50%, #ffed4e 75%, #ffd700 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+        
+        .date-cell { min-width: 100px; font-size: 0.9rem; }
+        .task-checkbox { 
+            transform: scale(1.3); 
+            cursor: pointer;
+            filter: drop-shadow(0 0 3px rgba(212, 175, 55, 0.5));
+        }
+        
+        .completed { 
+            background: rgba(20, 20, 20, 0.8) !important;
+            color: #555 !important;
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+        
+        .today-highlight { 
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(255, 215, 0, 0.1) 100%) !important;
+            border: 2px solid #d4af37 !important;
+            box-shadow: 
+                0 0 20px rgba(212, 175, 55, 0.4),
+                inset 0 0 20px rgba(212, 175, 55, 0.1) !important;
+            animation: pulse-gold 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-gold {
+            0%, 100% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.4), inset 0 0 20px rgba(212, 175, 55, 0.1); }
+            50% { box-shadow: 0 0 30px rgba(212, 175, 55, 0.6), inset 0 0 30px rgba(212, 175, 55, 0.15); }
+        }
+        
+        .overdue { 
+            color: #ff4444; 
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+        }
+        
+        /* Luxury Card Styles */
+        .luxury-card {
+            background: rgba(15, 15, 15, 0.9);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(212, 175, 55, 0.1),
+                0 0 40px rgba(212, 175, 55, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .luxury-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .luxury-card:hover::before {
+            left: 100%;
+        }
+        
+        /* Custom Scrollbar */
+        .table-container::-webkit-scrollbar { height: 10px; }
+        .table-container::-webkit-scrollbar-thumb { 
+            background: linear-gradient(90deg, #d4af37, #ffd700, #d4af37);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+        .table-container::-webkit-scrollbar-track { 
+            background: rgba(20, 20, 20, 0.5);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-thumb { 
+            background: linear-gradient(180deg, #d4af37, #ffd700, #d4af37);
+            border-radius: 6px;
+            border: 2px solid #000;
+        }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        
+        /* Gold Text */
+        .gold-text { 
+            color: #d4af37;
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+        
+        /* Input Styles */
+        input[type="date"] {
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: #e8e8e8;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-family: 'Cormorant Garamond', serif;
+            transition: all 0.3s ease;
+        }
+        
+        input[type="date"]:focus {
+            border-color: #d4af37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            outline: none;
+            background: rgba(30, 30, 30, 0.9);
+        }
+        
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(0.7) sepia(1) saturate(5) hue-rotate(5deg);
+            cursor: pointer;
+        }
+        
+        /* Button Styles */
+        .luxury-button {
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            color: #d4af37;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        .luxury-button:hover {
+            background: linear-gradient(135deg, #d4af37, #ffd700);
+            color: #000;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        .luxury-button.danger {
+            border-color: rgba(255, 68, 68, 0.5);
+            color: #ff4444;
+        }
+        
+        .luxury-button.danger:hover {
+            background: linear-gradient(135deg, #ff4444, #ff6666);
+            color: #fff;
+            box-shadow: 0 0 25px rgba(255, 68, 68, 0.6);
+        }
+        
+        .luxury-button.small {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            min-width: 40px;
+        }
+        
+        .luxury-button.small i {
+            font-size: 0.8rem;
+        }
+        
+        .unit-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .unit-count {
+            color: #999;
+            font-weight: normal;
+            font-size: 0.9rem;
+            margin-left: 12px;
+        }
+        
+        /* Table Enhancements */
+        table {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        
+        thead th {
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+        
+        tbody tr {
+            transition: all 0.3s ease;
+        }
+        
+        tbody tr:hover {
+            background: rgba(212, 175, 55, 0.08) !important;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+        }
+        
+        /* Decorative Elements */
+        .gold-divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+            margin: 20px 0;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+        
+        .corner-decoration {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+        }
+        
+        .corner-decoration.top-left {
+            top: 0;
+            left: 0;
+            border-right: none;
+            border-bottom: none;
+        }
+        
+        .corner-decoration.top-right {
+            top: 0;
+            right: 0;
+            border-left: none;
+            border-bottom: none;
+        }
+        
+        .corner-decoration.bottom-left {
+            bottom: 0;
+            left: 0;
+            border-right: none;
+            border-top: none;
+        }
+        
+        .corner-decoration.bottom-right {
+            bottom: 0;
+            right: 0;
+            border-left: none;
+            border-top: none;
+        }
+    </style>
+</head>
+<body class="pb-20">
+    <div class="content-wrapper">
+    
+    <!-- 多重水印层 -->
+    <div class="watermark-layer watermark-1">bwb创作</div>
+    <div class="watermark-layer watermark-2">bwb创作</div>
+    <div class="watermark-layer watermark-3">bwb创作</div>
+    
+    <!-- Header -->
+    <header class="p-6 shadow-md sticky top-0 z-50" style="background: rgba(0, 0, 0, 0.95); border-bottom: 1px solid rgba(212, 175, 55, 0.3); backdrop-filter: blur(20px); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.8), 0 0 40px rgba(212, 175, 55, 0.1);">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <div style="width: 3px; height: 40px; background: linear-gradient(180deg, transparent, #d4af37, transparent);"></div>
+                <h1 class="text-2xl md:text-3xl luxury-title">
+                    <i class="fas fa-crown mr-3" style="color: #d4af37;"></i>CET-4/6 EBBINGHAUS MASTERY
+                </h1>
+            </div>
+            <div class="text-sm">
+                <button onclick="resetData()" class="luxury-button danger">
+                    <i class="fas fa-redo mr-2"></i>RESET
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto p-4 space-y-6">
+
+        <!-- Today's Dashboard -->
+        <section class="luxury-card p-8 relative">
+            <div class="corner-decoration top-left"></div>
+            <div class="corner-decoration top-right"></div>
+            <div class="corner-decoration bottom-left"></div>
+            <div class="corner-decoration bottom-right"></div>
+            
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold flex items-center gold-text">
+                    <i class="fas fa-gem mr-3" style="font-size: 1.5rem;"></i>TODAY'S MISSION
+                </h2>
+                <span id="currentDateDisplay" class="text-sm" style="color: #999; font-family: 'Cinzel', serif; letter-spacing: 1px;"></span>
+            </div>
+            
+            <div class="gold-divider"></div>
+            
+            <div id="today-container" class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <!-- Content injected by JS -->
+                <div class="p-6 rounded text-center" style="background: rgba(20, 20, 20, 0.6); color: #666; border: 1px solid rgba(212, 175, 55, 0.2);">
+                    <i class="fas fa-spinner fa-spin" style="color: #d4af37; font-size: 2rem;"></i>
+                    <p class="mt-3" style="font-family: 'Cinzel', serif; letter-spacing: 1px;">LOADING...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content Area -->
+        <div id="main-content" class="space-y-8">
+            <!-- Tables injected by JS -->
+        </div>
+
+    </div>
+
+    <!-- 角落水印 -->
+    <div class="corner-watermark">bwb创作</div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- 1. 配置与初始化 ---
+        const STORAGE_KEY = 'cet6_ebbinghaus_data_v1';
+        
+        // 定义计划结构
+        const planStructure = [
+            { id: 'high', title: '🔥 高频词 (Core)', count: 9, prefix: 'List' },
+            { id: 'mid', title: '📘 中频词 (Common)', count: 12, prefix: 'List' },
+            { id: 'low', title: '📚 低频词 (Category)', customItems: ['自然科学', '人文社会', '商业经济', '医疗健康', '信息技术', '法律政治', '艺术文化'] },
+            { id: 'extra', title: '⚡ 非重点/补充', count: 5, prefix: 'Unit' }
+        ];
+
+        // 艾宾浩斯复习间隔（天数）
+        const intervals = [1, 2, 4, 7, 15];
+
+        let appData = {};
+
+        // --- 2. 核心逻辑函数 ---
+
+        // 初始化数据
+        function initData() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                appData = JSON.parse(stored);
+            } else {
+                // 生成初始数据结构
+                appData = {};
+                planStructure.forEach(cat => {
+                    appData[cat.id] = [];
+                    if (cat.customItems) {
+                        cat.customItems.forEach((name, idx) => {
+                            appData[cat.id].push(createTaskItem(cat.id, idx + 1, name));
+                        });
+                    } else {
+                        for (let i = 1; i <= cat.count; i++) {
+                            appData[cat.id].push(createTaskItem(cat.id, i, `${cat.prefix} ${i}`));
+                        }
+                    }
+                });
+                saveData();
+            }
+            renderApp();
+        }
+
+        function createTaskItem(catId, index, name) {
+            // 生成唯一ID，使用时间戳确保唯一性
+            const timestamp = Date.now();
+            const uniqueId = `${catId}-${timestamp}-${Math.random().toString(36).substr(2, 5)}`;
+            
+            return {
+                id: uniqueId,
+                name: name,
+                startDate: null,
+                reviews: [null, null, null, null, null], // 对应 1, 2, 4, 7, 15 天后的日期
+                status: {
+                    start: false,
+                    r1: false, r2: false, r3: false, r4: false, r5: false
+                }
+            };
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+            renderDashboard(); // 保存时只需刷新看板，不需要重绘整个表格（除非是日期变更）
+        }
+
+        function addDays(dateStr, days) {
+            if (!dateStr) return null;
+            const date = new Date(dateStr);
+            date.setDate(date.getDate() + days);
+            return date.toISOString().split('T')[0];
+        }
+
+        function getTodayStr() {
+            return new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
+        }
+
+        // --- 3. 交互处理 ---
+
+        // 设置开始日期
+        window.handleDateChange = function(itemId, dateValue) {
+            // 查找对应的项目
+            let targetItem = null;
+            
+            planStructure.forEach(cat => {
+                appData[cat.id].forEach(item => {
+                    if (item.id === itemId) {
+                        targetItem = item;
+                    }
+                });
+            });
+            
+            if (!targetItem) return;
+            
+            targetItem.startDate = dateValue;
+            
+            // 自动计算后续复习日期
+            if (dateValue) {
+                targetItem.reviews = intervals.map(days => addDays(dateValue, days));
+            } else {
+                targetItem.reviews = [null, null, null, null, null];
+            }
+            
+            saveData();
+            renderTables(); // 日期改变需要重绘表格显示日期
+            renderDashboard();
+        }
+
+        // 切换完成状态
+        window.toggleStatus = function(catId, itemIdx, type) {
+            const item = appData[catId][itemIdx];
+            // type 可以是 'start', 'r1', 'r2'...
+            item.status[type] = !item.status[type];
+            
+            // UI 更新优化：直接操作 DOM 类名，避免重绘整个表格导致闪烁或焦点丢失
+            const cellId = `cell-${item.id}-${type}`;
+            const cellEl = document.getElementById(cellId);
+            if (cellEl) {
+                if (item.status[type]) {
+                    cellEl.classList.add('completed');
+                } else {
+                    cellEl.classList.remove('completed');
+                }
+            }
+            saveData();
+        }
+
+        window.resetData = function() {
+            if(confirm('确定要清空所有进度并重置吗？此操作无法撤销。')) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        // 编辑单元名称
+        window.editUnitName = function(itemId, spanElement) {
+            const currentName = spanElement.textContent.trim();
+            const newName = prompt('编辑单元名称:', currentName);
+            
+            if (newName && newName.trim() !== '' && newName.trim() !== currentName) {
+                // 查找并更新项目名称
+                planStructure.forEach(cat => {
+                    appData[cat.id].forEach(item => {
+                        if (item.id === itemId) {
+                            item.name = newName.trim();
+                            spanElement.textContent = newName.trim();
+                        }
+                    });
+                });
+                
+                saveData();
+                renderDashboard(); // 更新看板显示
+            }
+        }
+
+        // 从看板切换任务状态
+        window.toggleTaskFromDashboard = function(itemId, type) {
+            // 查找对应的项目
+            let targetItem = null;
+            let targetCatId = null;
+            let targetIdx = null;
+            
+            planStructure.forEach(cat => {
+                appData[cat.id].forEach((item, idx) => {
+                    if (item.id === itemId) {
+                        targetItem = item;
+                        targetCatId = cat.id;
+                        targetIdx = idx;
+                    }
+                });
+            });
+            
+            if (targetItem) {
+                toggleStatus(targetCatId, targetIdx, type);
+            }
+        }
+
+        // 添加新单元
+        window.addUnit = function(catId) {
+            const category = planStructure.find(cat => cat.id === catId);
+            if (!category) return;
+            
+            const items = appData[catId];
+            const newIndex = items.length + 1;
+            
+            let newName;
+            if (category.customItems) {
+                // 对于自定义项目，让用户输入名称
+                newName = prompt('请输入新单元的名称:', `新类别 ${newIndex}`);
+                if (!newName || newName.trim() === '') return;
+                newName = newName.trim();
+            } else {
+                // 对于标准项目，使用前缀 + 编号
+                newName = `${category.prefix} ${newIndex}`;
+            }
+            
+            const newItem = createTaskItem(catId, newIndex, newName);
+            items.push(newItem);
+            
+            saveData();
+            renderTables();
+            
+            // 滚动到新添加的项目
+            setTimeout(() => {
+                const newRow = document.getElementById(`row-${newItem.id}`);
+                if (newRow) {
+                    newRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    newRow.style.background = 'rgba(212, 175, 55, 0.2)';
+                    newRow.style.boxShadow = '0 0 30px rgba(212, 175, 55, 0.4)';
+                    setTimeout(() => {
+                        newRow.style.background = 'rgba(15, 15, 15, 0.6)';
+                        newRow.style.boxShadow = 'none';
+                    }, 2000);
+                }
+            }, 100);
+        }
+
+        // 删除单元
+        window.removeUnit = function(catId) {
+            const items = appData[catId];
+            if (items.length <= 1) {
+                alert('每个类别至少需要保留一个单元！');
+                return;
+            }
+            
+            const lastItem = items[items.length - 1];
+            const hasProgress = lastItem.startDate || Object.values(lastItem.status).some(status => status);
+            
+            if (hasProgress) {
+                if (!confirm(`"${lastItem.name}" 已有学习进度，确定要删除吗？此操作无法撤销。`)) {
+                    return;
+                }
+            }
+            
+            items.pop();
+            saveData();
+            renderTables();
+            renderDashboard();
+        }
+
+        // --- 4. 渲染逻辑 ---
+
+        function renderApp() {
+            document.getElementById('currentDateDisplay').textContent = `今天是: ${getTodayStr()}`;
+            renderTables();
+            renderDashboard();
+        }
+
+        function renderDashboard() {
+            const container = document.getElementById('today-container');
+            const today = getTodayStr();
+            let newTasks = [];
+            let reviewTasks = [];
+
+            // 遍历所有数据查找今天的任务
+            planStructure.forEach(cat => {
+                appData[cat.id].forEach(item => {
+                    // 1. 检查是否今天开始 (或者已开始但未完成)
+                    if (item.startDate === today && !item.status.start) {
+                        newTasks.push({ ...item, type: 'start', label: '首次背诵', catTitle: cat.title });
+                    }
+
+                    // 2. 检查复习任务
+                    item.reviews.forEach((date, idx) => {
+                        if (date === today && !item.status[`r${idx+1}`]) {
+                            reviewTasks.push({ 
+                                ...item, 
+                                type: `r${idx+1}`, 
+                                label: `复习 ${intervals[idx]}天后`, 
+                                catTitle: cat.title 
+                            });
+                        }
+                    });
+                });
+            });
+
+            let html = '';
+            
+            // 新学板块
+            html += `<div class="p-6 rounded-lg relative" style="background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(20, 20, 20, 0.8) 100%); border: 1px solid rgba(212, 175, 55, 0.4); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(212, 175, 55, 0.1);">
+                        <h3 class="font-bold mb-4 pb-2 gold-text flex items-center" style="border-bottom: 1px solid rgba(212, 175, 55, 0.3); font-size: 1.1rem;">
+                            <i class="fas fa-star mr-2"></i>NEW WORDS <span style="color: #999; font-size: 0.9rem; margin-left: 8px;">(${newTasks.length})</span>
+                        </h3>
+                        ${newTasks.length === 0 ? '<p class="text-sm text-center py-4" style="color: #666; font-style: italic;">No new tasks scheduled. Set start dates below.</p>' : 
+                          `<ul class="space-y-3">
+                            ${newTasks.map(t => `
+                                <li class="flex justify-between items-center p-3 rounded transition" style="background: rgba(30, 30, 30, 0.6); border: 1px solid rgba(212, 175, 55, 0.2); backdrop-filter: blur(5px);"
+                                    onmouseover="this.style.background='rgba(40, 40, 30, 0.8)'; this.style.borderColor='rgba(212, 175, 55, 0.4)'"
+                                    onmouseout="this.style.background='rgba(30, 30, 30, 0.6)'; this.style.borderColor='rgba(212, 175, 55, 0.2)'">
+                                    <span class="text-sm font-medium" style="color: #e8e8e8; font-size: 1rem;">
+                                        <span class="text-xs px-2 py-1 rounded mr-2" style="background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.1)); color: #d4af37; border: 1px solid rgba(212, 175, 55, 0.3); font-family: 'Cinzel', serif;">${t.catTitle.split(' ')[0]}</span>
+                                        ${t.name}
+                                    </span>
+                                    <input type="checkbox" class="task-checkbox" style="accent-color: #d4af37;" 
+                                        onchange="toggleTaskFromDashboard('${t.id}', '${t.type}')" 
+                                        ${t.status[t.type] ? 'checked' : ''}>
+                                </li>
+                            `).join('')}
+                          </ul>`
+                        }
+                     </div>`;
+
+            // 复习板块
+            html += `<div class="p-6 rounded-lg relative" style="background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(20, 20, 20, 0.8) 100%); border: 1px solid rgba(212, 175, 55, 0.4); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(212, 175, 55, 0.1);">
+                        <h3 class="font-bold mb-4 pb-2 gold-text flex items-center" style="border-bottom: 1px solid rgba(212, 175, 55, 0.3); font-size: 1.1rem;">
+                            <i class="fas fa-sync-alt mr-2"></i>REVIEW <span style="color: #999; font-size: 0.9rem; margin-left: 8px;">(${reviewTasks.length})</span>
+                        </h3>
+                        ${reviewTasks.length === 0 ? '<p class="text-sm text-center py-4" style="color: #666; font-style: italic;">No reviews scheduled for today.</p>' : 
+                          `<ul class="space-y-3">
+                            ${reviewTasks.map(t => `
+                                <li class="flex justify-between items-center p-3 rounded transition" style="background: rgba(30, 30, 30, 0.6); border: 1px solid rgba(212, 175, 55, 0.2); backdrop-filter: blur(5px);"
+                                    onmouseover="this.style.background='rgba(40, 40, 30, 0.8)'; this.style.borderColor='rgba(212, 175, 55, 0.4)'"
+                                    onmouseout="this.style.background='rgba(30, 30, 30, 0.6)'; this.style.borderColor='rgba(212, 175, 55, 0.2)'">
+                                    <span class="text-sm font-medium" style="color: #e8e8e8; font-size: 1rem;">
+                                        <span class="text-xs px-2 py-1 rounded mr-2" style="background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.1)); color: #d4af37; border: 1px solid rgba(212, 175, 55, 0.3); font-family: 'Cinzel', serif;">${t.catTitle.split(' ')[0]}</span>
+                                        ${t.name}
+                                        <span class="text-xs ml-2" style="color: #999; font-style: italic;">${t.label}</span>
+                                    </span>
+                                    <button class="text-xs px-3 py-1.5 rounded transition" style="background: rgba(212, 175, 55, 0.1); color: #d4af37; border: 1px solid rgba(212, 175, 55, 0.4); font-family: 'Cinzel', serif; letter-spacing: 1px; font-weight: 600;"
+                                        onmouseover="this.style.background='rgba(212, 175, 55, 0.2)'; this.style.boxShadow='0 0 15px rgba(212, 175, 55, 0.3)'" 
+                                        onmouseout="this.style.background='rgba(212, 175, 55, 0.1)'; this.style.boxShadow='none'"
+                                        onclick="scrollToItem('${t.id}')">
+                                        <i class="fas fa-arrow-down mr-1"></i>GO
+                                    </button>
+                                </li>
+                            `).join('')}
+                          </ul>`
+                        }
+                     </div>`;
+
+            container.innerHTML = html;
+        }
+
+        // 辅助函数：看板跳转到表格
+        window.scrollToItem = function(itemId) {
+            const el = document.getElementById(`row-${itemId}`);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                el.style.background = 'rgba(212, 175, 55, 0.2)';
+                el.style.boxShadow = '0 0 30px rgba(212, 175, 55, 0.4)';
+                setTimeout(() => {
+                    el.style.background = 'rgba(15, 15, 15, 0.6)';
+                    el.style.boxShadow = 'none';
+                }, 2000);
+            }
+        }
+
+        function renderTables() {
+            const container = document.getElementById('main-content');
+            const today = getTodayStr();
+            let html = '';
+
+            planStructure.forEach(cat => {
+                const items = appData[cat.id];
+                
+                html += `
+                <div class="luxury-card relative" style="overflow: visible;">
+                    <div class="corner-decoration top-left"></div>
+                    <div class="corner-decoration top-right"></div>
+                    
+                    <div class="px-8 py-4" style="background: rgba(20, 20, 20, 0.6); border-bottom: 1px solid rgba(212, 175, 55, 0.3);">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-lg gold-text flex items-center">
+                                <i class="fas fa-layer-group mr-3"></i>${cat.title}
+                                <span class="unit-count">(${items.length} units)</span>
+                            </h3>
+                            <div class="unit-controls">
+                                <button onclick="removeUnit('${cat.id}')" class="luxury-button danger small" title="删除最后一个单元">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <button onclick="addUnit('${cat.id}')" class="luxury-button small" title="添加新单元">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="text-sm" style="background: rgba(30, 30, 30, 0.8); color: #d4af37;">
+                                    <th class="p-4 whitespace-nowrap sticky left-0 shadow-sm z-10 w-32" style="background: rgba(30, 30, 30, 0.95); border-bottom: 2px solid rgba(212, 175, 55, 0.3);">UNIT</th>
+                                    <th class="p-4 whitespace-nowrap min-w-[140px]" style="border-bottom: 2px solid rgba(212, 175, 55, 0.3);">START DATE</th>
+                                    <th class="p-4 whitespace-nowrap text-center" style="border-bottom: 2px solid rgba(212, 175, 55, 0.3);">R1<br><span class="text-xs font-normal" style="color: #999;">+1 Day</span></th>
+                                    <th class="p-4 whitespace-nowrap text-center" style="border-bottom: 2px solid rgba(212, 175, 55, 0.3);">R2<br><span class="text-xs font-normal" style="color: #999;">+2 Days</span></th>
+                                    <th class="p-4 whitespace-nowrap text-center" style="border-bottom: 2px solid rgba(212, 175, 55, 0.3);">R3<br><span class="text-xs font-normal" style="color: #999;">+4 Days</span></th>
+                                    <th class="p-4 whitespace-nowrap text-center" style="border-bottom: 2px solid rgba(212, 175, 55, 0.3);">R4<br><span class="text-xs font-normal" style="color: #999;">+7 Days</span></th>
+                                    <th class="p-4 whitespace-nowrap text-center" style="border-bottom: 2px solid rgba(212, 175, 55, 0.3);">R5<br><span class="text-xs font-normal" style="color: #999;">+15 Days</span></th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm">
+                                ${items.map((item, idx) => {
+                                    // 生成复习单元格的辅助函数
+                                    const createReviewCell = (rDate, rIdx, statusKey) => {
+                                        if (!rDate) return '<td class="p-4 text-center" style="color: #555; font-style: italic;">—</td>';
+                                        
+                                        const isCompleted = item.status[statusKey];
+                                        const isToday = rDate === today;
+                                        const isOverdue = rDate < today && !isCompleted;
+                                        const cellId = `cell-${item.id}-${statusKey}`;
+                                        
+                                        let classStr = `p-4 text-center date-cell transition-all duration-300 `;
+                                        if (isCompleted) classStr += 'completed ';
+                                        if (isToday && !isCompleted) classStr += 'today-highlight ';
+                                        
+                                        let dateDisplayClass = isOverdue ? 'overdue' : '';
+                                        let dateColor = isOverdue ? '' : 'color: #e8e8e8; font-weight: 500;';
+
+                                        return `
+                                            <td id="${cellId}" class="${classStr}">
+                                                <div class="flex flex-col items-center justify-center gap-2">
+                                                    <span class="${dateDisplayClass}" style="${dateColor} font-size: 0.95rem;">${rDate.slice(5)}</span>
+                                                    <input type="checkbox" class="task-checkbox" style="accent-color: #d4af37;"
+                                                        ${isCompleted ? 'checked' : ''}
+                                                        onclick="toggleStatus('${cat.id}', ${idx}, '${statusKey}')">
+                                                </div>
+                                            </td>
+                                        `;
+                                    };
+
+                                    return `
+                                    <tr id="row-${item.id}" class="transition" style="background: rgba(15, 15, 15, 0.6); border-bottom: 1px solid rgba(212, 175, 55, 0.1);" 
+                                        onmouseover="this.style.background='rgba(30, 30, 20, 0.8)'" 
+                                        onmouseout="this.style.background='rgba(15, 15, 15, 0.6)'">
+                                        <td class="p-4 font-medium sticky left-0 z-10" style="color: #e8e8e8; background: rgba(20, 20, 20, 0.95); border-right: 1px solid rgba(212, 175, 55, 0.2); font-size: 1rem;">
+                                            <span ondblclick="editUnitName('${item.id}', this)" style="cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" 
+                                                  onmouseover="this.style.background='rgba(212, 175, 55, 0.1)'" 
+                                                  onmouseout="this.style.background='transparent'"
+                                                  title="双击编辑名称">
+                                                ${item.name}
+                                            </span>
+                                        </td>
+                                        <td class="p-4">
+                                            <div class="flex items-center gap-3">
+                                                <input type="date" value="${item.startDate || ''}" 
+                                                    class="border rounded px-3 py-2 text-sm outline-none"
+                                                    onchange="handleDateChange('${item.id}', this.value)">
+                                                ${item.startDate ? 
+                                                  `<input type="checkbox" class="task-checkbox" style="accent-color: #d4af37;"
+                                                    id="cell-${item.id}-start"
+                                                    ${item.status.start ? 'checked' : ''}
+                                                    onclick="toggleStatus('${cat.id}', ${idx}, 'start')">` 
+                                                  : ''}
+                                            </div>
+                                        </td>
+                                        ${createReviewCell(item.reviews[0], 0, 'r1')}
+                                        ${createReviewCell(item.reviews[1], 1, 'r2')}
+                                        ${createReviewCell(item.reviews[2], 2, 'r3')}
+                                        ${createReviewCell(item.reviews[3], 3, 'r4')}
+                                        ${createReviewCell(item.reviews[4], 4, 'r5')}
+                                    </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // 启动应用
+        initData();
+
+    </script>
+    </div>
+</body>
+</html>
